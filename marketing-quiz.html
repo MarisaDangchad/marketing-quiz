@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz การตลาดประยุกต์ 100 ข้อ</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Kanit:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #040d1a;
+    --bg2: #071628;
+    --card: #0a1f3a;
+    --card2: #0d2847;
+    --card3: #102e52;
+    --accent: #38bdf8;
+    --accent2: #7dd3fc;
+    --accent3: #0ea5e9;
+    --gold: #fbbf24;
+    --correct: #34d399;
+    --wrong: #f87171;
+    --text: #e0f2fe;
+    --sub: #7ba9c8;
+    --border: rgba(56,189,248,0.18);
+    --border2: rgba(56,189,248,0.32);
+    --glow: rgba(56,189,248,0.12);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  html { scroll-behavior: smooth; }
+  
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sarabun', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 10%, rgba(14,165,233,0.12) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 80% at 85% 90%, rgba(56,189,248,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(7,22,40,0.6) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  /* Floating particles */
+  .particles {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0;
+    animation: float linear infinite;
+  }
+  @keyframes float {
+    0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(-10vh) translateX(40px); opacity: 0; }
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    position: relative; z-index: 1;
+  }
+
+  /* ─── INTRO ─── */
+  .intro {
+    text-align: center;
+    padding: 60px 20px 40px;
+    animation: fadeUp 0.8s ease both;
+  }
+  .intro-icon {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    display: block;
+    filter: drop-shadow(0 0 20px rgba(56,189,248,0.5));
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  .intro h1 {
+    font-family: 'Kanit', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    line-height: 1.15;
+    margin-bottom: 16px;
+    background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 40%, #0ea5e9 70%, #7dd3fc 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+  }
+  @keyframes shimmer {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 200% 50%; }
+  }
+  .intro-sub {
+    color: var(--sub); font-size: 1.05rem; line-height: 1.9;
+    margin-bottom: 36px; max-width: 520px; margin-left: auto; margin-right: auto;
+  }
+  .intro-sub strong { color: var(--accent2); font-weight: 600; }
+
+  .badge-row {
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+    margin-bottom: 44px;
+  }
+  .badge {
+    background: rgba(56,189,248,0.08);
+    border: 1px solid var(--border);
+    border-radius: 100px; padding: 8px 18px;
+    font-size: 0.88rem; color: var(--sub);
+    display: flex; align-items: center; gap: 6px;
+    backdrop-filter: blur(8px);
+  }
+  .badge strong { color: var(--accent); font-weight: 700; }
+
+  .chapters-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px; margin-bottom: 44px; text-align: left;
+  }
+  .chapter-item {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 14px 18px;
+    display: flex; align-items: center; gap: 12px;
+    transition: all 0.25s;
+  }
+  .chapter-item:hover { border-color: var(--border2); background: var(--card2); }
+  .chapter-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+    box-shadow: 0 0 8px var(--accent);
+  }
+  .chapter-name { font-size: 0.88rem; color: var(--sub); line-height: 1.4; }
+  .chapter-num { font-size: 0.78rem; color: var(--accent3); font-weight: 700; }
+
+  .btn-start {
+    background: linear-gradient(135deg, var(--accent3) 0%, #0284c7 50%, var(--accent3) 100%);
+    background-size: 200% 100%;
+    border: none; border-radius: 18px;
+    padding: 20px 64px; font-size: 1.18rem;
+    font-family: 'Kanit', sans-serif; font-weight: 600;
+    color: white; cursor: pointer;
+    box-shadow: 0 8px 32px rgba(14,165,233,0.4), 0 0 0 1px rgba(56,189,248,0.2);
+    transition: all 0.35s;
+    letter-spacing: 0.5px; position: relative; overflow: hidden;
+  }
+  .btn-start::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .btn-start:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(14,165,233,0.55), 0 0 0 1px rgba(56,189,248,0.4);
+    background-position: right center;
+  }
+  .btn-start:hover::after { opacity: 1; }
+
+  /* ─── PROGRESS ─── */
+  .progress-wrap { margin-bottom: 28px; }
+  .progress-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px;
+  }
+  .progress-label { font-size: 0.85rem; color: var(--sub); }
+  .progress-right { display: flex; align-items: center; gap: 12px; }
+  .score-live {
+    font-size: 0.85rem; color: var(--sub);
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 100px; padding: 3px 12px;
+  }
+  .score-live .s-c { color: var(--correct); font-weight: 700; }
+  .score-live .s-w { color: var(--wrong); font-weight: 700; }
+  .progress-num { font-size: 0.95rem; font-weight: 700; color: var(--accent); }
+  .progress-bar-bg {
+    height: 5px; background: var(--card2); border-radius: 100px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0ea5e9, #38bdf8, #7dd3fc);
+    background-size: 200% 100%;
+    border-radius: 100px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+    animation: barShimmer 2s linear infinite;
+  }
+  @keyframes barShimmer {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+  }
+
+  /* ─── QUESTION CARD ─── */
+  .q-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 28px; padding: 38px 36px 32px;
+    box-shadow: 0 4px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(56,189,248,0.05);
+    animation: cardIn 0.4s cubic-bezier(.4,0,.2,1) both;
+    position: relative; overflow: hidden;
+  }
+  .q-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+    opacity: 0.6;
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .q-chapter {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 2.5px;
+    color: var(--accent); text-transform: uppercase;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 18px;
+  }
+  .q-chapter::before {
+    content: ''; flex: none;
+    width: 24px; height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+
+  .q-num {
+    position: absolute; top: 32px; right: 36px;
+    font-family: 'Kanit', sans-serif; font-size: 3.5rem; font-weight: 700;
+    color: rgba(56,189,248,0.06); line-height: 1; user-select: none;
+  }
+
+  .q-text {
+    font-size: 1.15rem; font-weight: 500; line-height: 1.85;
+    margin-bottom: 30px; color: var(--text);
+    position: relative; z-index: 1;
+    padding-right: 60px;
+  }
+
+  .options { display: flex; flex-direction: column; gap: 11px; }
+  .opt {
+    background: var(--card2);
+    border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 16px 22px;
+    cursor: pointer; font-family: 'Sarabun', sans-serif; font-size: 1rem;
+    color: var(--text); text-align: left;
+    display: flex; align-items: flex-start; gap: 14px;
+    transition: all 0.22s; line-height: 1.6;
+    position: relative; overflow: hidden;
+  }
+  .opt::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(56,189,248,0.05), transparent);
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .opt:hover:not(:disabled) {
+    border-color: var(--accent3);
+    background: var(--card3);
+    transform: translateX(6px);
+    box-shadow: 0 4px 20px rgba(14,165,233,0.15);
+  }
+  .opt:hover:not(:disabled)::before { opacity: 1; }
+  .opt:disabled { cursor: default; }
+
+  .opt-letter {
+    min-width: 30px; height: 30px; border-radius: 9px;
+    background: rgba(56,189,248,0.1);
+    border: 1px solid rgba(56,189,248,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 700; color: var(--accent);
+    flex-shrink: 0; margin-top: 1px;
+    font-family: 'Kanit', sans-serif;
+    transition: all 0.22s;
+  }
+  .opt-text { flex: 1; }
+
+  /* answer states */
+  .opt.correct {
+    border-color: var(--correct);
+    background: rgba(52,211,153,0.08);
+    transform: none !important;
+    box-shadow: 0 0 20px rgba(52,211,153,0.15);
+  }
+  .opt.correct .opt-letter {
+    background: var(--correct); color: #040d1a;
+    border-color: var(--correct);
+    box-shadow: 0 0 12px rgba(52,211,153,0.5);
+  }
+  .opt.wrong {
+    border-color: var(--wrong);
+    background: rgba(248,113,113,0.08);
+    transform: none !important;
+  }
+  .opt.wrong .opt-letter {
+    background: var(--wrong); color: white;
+    border-color: var(--wrong);
+  }
+  .opt.dim { opacity: 0.45; }
+
+  /* ─── RESULT BADGE ─── */
+  .result-badge {
+    display: none;
+    margin-top: 20px;
+    padding: 14px 20px;
+    border-radius: 14px;
+    font-size: 1rem; font-weight: 600;
+    animation: badgeIn 0.35s cubic-bezier(.4,0,.2,1) both;
+  }
+  @keyframes badgeIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .result-badge.show { display: flex; align-items: center; gap: 10px; }
+  .result-badge.correct-badge {
+    background: rgba(52,211,153,0.1);
+    border: 1px solid rgba(52,211,153,0.3);
+    color: var(--correct);
+  }
+  .result-badge.wrong-badge {
+    background: rgba(248,113,113,0.1);
+    border: 1px solid rgba(248,113,113,0.3);
+    color: var(--wrong);
+  }
+
+  /* ─── EXPLANATION ─── */
+  .explanation {
+    margin-top: 14px;
+    background: rgba(56,189,248,0.05);
+    border: 1px solid rgba(56,189,248,0.15);
+    border-radius: 16px; padding: 20px 24px;
+    display: none;
+    animation: fadeUp 0.35s ease both;
+  }
+  .explanation.show { display: block; }
+  .exp-title {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--accent);
+    margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
+  }
+  .exp-title::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, rgba(56,189,248,0.3), transparent);
+  }
+  .exp-body {
+    color: var(--sub); font-size: 0.97rem; line-height: 1.85;
+  }
+  .exp-body strong, .exp-body .hl { color: var(--accent2); font-weight: 600; }
+
+  /* ─── NEXT BUTTON ─── */
+  .btn-next {
+    margin-top: 20px; width: 100%;
+    background: linear-gradient(135deg, rgba(14,165,233,0.15), rgba(56,189,248,0.08));
+    border: 1.5px solid var(--accent3);
+    border-radius: 16px; padding: 16px;
+    font-size: 1rem; font-family: 'Kanit', sans-serif; font-weight: 600;
+    color: var(--accent); cursor: pointer;
+    transition: all 0.28s; letter-spacing: 0.5px;
+    display: none; position: relative; overflow: hidden;
+  }
+  .btn-next::before {
+    content: '';
+    position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(56,189,248,0.1), transparent);
+    transition: left 0.5s;
+  }
+  .btn-next.show { display: block; }
+  .btn-next:hover {
+    background: rgba(14,165,233,0.2);
+    box-shadow: 0 6px 24px rgba(14,165,233,0.25);
+    transform: translateY(-2px);
+  }
+  .btn-next:hover::before { left: 100%; }
+
+  /* ─── SCORE SCREEN ─── */
+  .score-screen {
+    text-align: center; padding: 50px 20px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .score-ring-wrap {
+    position: relative; width: 190px; height: 190px;
+    margin: 0 auto 36px;
+  }
+  .score-ring-wrap svg { transform: rotate(-90deg); }
+  .ring-bg { fill: none; stroke: var(--card2); stroke-width: 12; }
+  .ring-fill {
+    fill: none;
+    stroke: url(#blueGrad);
+    stroke-width: 12;
+    stroke-linecap: round;
+    stroke-dasharray: 534;
+    stroke-dashoffset: 534;
+    transition: stroke-dashoffset 1.8s cubic-bezier(.4,0,.2,1);
+    filter: drop-shadow(0 0 8px rgba(56,189,248,0.6));
+  }
+  .ring-center {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  .ring-pct {
+    font-family: 'Kanit', sans-serif;
+    font-size: 2.8rem; font-weight: 700;
+    color: var(--accent2); line-height: 1;
+  }
+  .ring-label { font-size: 0.78rem; color: var(--sub); margin-top: 4px; letter-spacing: 1px; }
+
+  .score-title {
+    font-family: 'Kanit', sans-serif;
+    font-size: 2rem; margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+
+  .grade-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 28px; border-radius: 100px;
+    font-size: 1rem; font-weight: 700;
+    margin: 16px 0 32px;
+    border: 1.5px solid;
+  }
+
+  .stats-row {
+    display: flex; gap: 14px; justify-content: center;
+    flex-wrap: wrap; margin-bottom: 16px;
+  }
+  .stat-box {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 18px; padding: 22px 32px;
+    min-width: 130px;
+  }
+  .stat-num { font-family: 'Kanit', sans-serif; font-size: 2.2rem; font-weight: 700; line-height: 1; }
+  .stat-num.c { color: var(--correct); text-shadow: 0 0 16px rgba(52,211,153,0.4); }
+  .stat-num.w { color: var(--wrong); }
+  .stat-label { font-size: 0.82rem; color: var(--sub); margin-top: 6px; }
+
+  .btn-restart {
+    background: transparent;
+    border: 1.5px solid var(--accent);
+    border-radius: 14px; padding: 14px 44px;
+    font-size: 1rem; font-family: 'Kanit', sans-serif; font-weight: 600;
+    color: var(--accent); cursor: pointer;
+    transition: all 0.28s; margin: 8px;
+  }
+  .btn-restart:hover {
+    background: var(--accent); color: var(--bg);
+    box-shadow: 0 6px 24px rgba(56,189,248,0.35);
+    transform: translateY(-2px);
+  }
+
+  /* ─── UTILITIES ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hidden { display: none !important; }
+
+  @media (max-width: 600px) {
+    .q-card { padding: 28px 20px 24px; }
+    .q-text { font-size: 1.05rem; padding-right: 40px; }
+    .q-num { font-size: 2.5rem; top: 24px; right: 22px; }
+    .opt { padding: 14px 16px; font-size: 0.95rem; }
+    .chapters-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<div class="container">
+
+  <!-- ══ INTRO ══ -->
+  <div id="intro" class="intro">
+    <span class="intro-icon">📘</span>
+    <h1>Quiz การตลาด<br>ประยุกต์ 100 ข้อ</h1>
+    <p class="intro-sub">ทดสอบความรู้โจทย์ประยุกต์ครอบคลุม <strong>6 บท</strong><br>พร้อมเฉลยและคำอธิบายเชิงลึกหลังตอบทุกข้อ</p>
+
+    <div class="badge-row">
+      <div class="badge">📚 <strong>100</strong> ข้อ</div>
+      <div class="badge">🎯 4 ตัวเลือก</div>
+      <div class="badge">💡 เฉลย + อธิบาย</div>
+      <div class="badge">⏱ ไม่จับเวลา</div>
+    </div>
+
+    <div class="chapters-grid">
+      <div class="chapter-item"><div class="chapter-dot"></div><div><div class="chapter-num">บทที่ 1 · 15 ข้อ</div><div class="chapter-name">โลกของการตลาด</div></div></div>
+      <div class="chapter-item"><div class="chapter-dot"></div><div><div class="chapter-num">บทที่ 2 · 15 ข้อ</div><div class="chapter-name">สภาพแวดล้อมทางการตลาด</div></div></div>
+      <div class="chapter-item"><div class="chapter-dot"></div><div><div class="chapter-num">บทที่ 3 · 17 ข้อ</div><div class="chapter-name">กลยุทธ์ทางการตลาด</div></div></div>
+      <div class="chapter-item"><div class="chapter-dot"></div><div><div class="chapter-num">บทที่ 4 · 18 ข้อ</div><div class="chapter-name">ระบบสารสนเทศทางการตลาด</div></div></div>
+      <div class="chapter-item"><div class="chapter-dot"></div><div><div class="chapter-num">บทที่ 5 · 17 ข้อ</div><div class="chapter-name">การวิจัยการตลาด</div></div></div>
+      <div class="chapter-item"><div class="chapter-dot"></div><div><div class="chapter-num">บทที่ 6 · 18 ข้อ</div><div class="chapter-name">พฤติกรรมผู้บริโภค</div></div></div>
+    </div>
+
+    <button class="btn-start" onclick="startQuiz()">เริ่มทำข้อสอบ &rarr;</button>
+  </div>
+
+  <!-- ══ QUIZ ══ -->
+  <div id="quizSection" class="hidden">
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span class="progress-label">ความคืบหน้า</span>
+        <div class="progress-right">
+          <span class="score-live">✅ <span class="s-c" id="liveCorrect">0</span> &nbsp;❌ <span class="s-w" id="liveWrong">0</span></span>
+          <span class="progress-num" id="progNum">1 / 100</span>
+        </div>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progBar" style="width:1%"></div>
+      </div>
+    </div>
+
+    <div class="q-card" id="qCard">
+      <div class="q-chapter" id="qChapter"></div>
+      <div class="q-num" id="qNumBig"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="options" id="optsWrap"></div>
+      <div class="result-badge" id="resultBadge"></div>
+      <div class="explanation" id="explanation">
+        <div class="exp-title">💡 คำอธิบาย</div>
+        <div class="exp-body" id="expText"></div>
+      </div>
+      <button class="btn-next" id="btnNext" onclick="nextQ()">ข้อถัดไป →</button>
+    </div>
+  </div>
+
+  <!-- ══ SCORE ══ -->
+  <div id="scoreScreen" class="score-screen hidden">
+    <div class="score-ring-wrap">
+      <svg width="190" height="190" viewBox="0 0 190 190">
+        <defs>
+          <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#0ea5e9"/>
+            <stop offset="100%" style="stop-color:#7dd3fc"/>
+          </linearGradient>
+        </defs>
+        <circle class="ring-bg" cx="95" cy="95" r="85"/>
+        <circle class="ring-fill" id="ringFill" cx="95" cy="95" r="85"/>
+      </svg>
+      <div class="ring-center">
+        <div class="ring-pct" id="ringPct">0%</div>
+        <div class="ring-label">คะแนน</div>
+      </div>
+    </div>
+
+    <div class="score-title" id="scoreTitle">ผลลัพธ์ของคุณ</div>
+    <div class="grade-badge" id="gradeBadge"></div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-num c" id="cNum">0</div>
+        <div class="stat-label">✅ ตอบถูก</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num w" id="wNum">0</div>
+        <div class="stat-label">❌ ตอบผิด</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:var(--accent2)" id="pctNum">0%</div>
+        <div class="stat-label">🎯 ความแม่นยำ</div>
+      </div>
+    </div>
+
+    <button class="btn-restart" onclick="restartQuiz()">🔄 เริ่มทำใหม่</button>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  QUESTION BANK – 100 ข้อ
+// ══════════════════════════════════════
+const questions = [
+
+  // ─── บทที่ 1 : โลกของการตลาด (15 ข้อ) ───
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "ซูเปอร์มาร์เก็ตนำโค้ก 12 กระป๋องใส่แพ็คขาย แทนการขายแยกชิ้น — สิ่งนี้สร้างคุณประโยชน์ด้านใดให้ผู้บริโภค?",
+    opts: ["คุณประโยชน์ด้านเวลา", "คุณประโยชน์ด้านรูปแบบ", "คุณประโยชน์ด้านสถานที่", "คุณประโยชน์ด้านการครอบครอง"],
+    ans: 1,
+    exp: "คุณประโยชน์ด้านรูปแบบ (Form Utility) เกิดจากการเปลี่ยนแปลงลักษณะหรือบรรจุภัณฑ์ของสินค้าให้ตรงความต้องการลูกค้า เช่น บรรจุในแพ็ค 12 กระป๋อง ทำให้สะดวกและคุ้มค่ากว่า"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "Grab เปิดให้จ่ายค่าบริการผ่านบัตรเครดิตออนไลน์ได้ — สิ่งนี้สร้างคุณประโยชน์ด้านใด?",
+    opts: ["คุณประโยชน์ด้านสถานที่", "คุณประโยชน์ด้านเวลา", "คุณประโยชน์ด้านการครอบครอง", "คุณประโยชน์ด้านรูปแบบ"],
+    ans: 2,
+    exp: "คุณประโยชน์ด้านการครอบครอง (Possession Utility) อำนวยความสะดวกให้ลูกค้าเป็นเจ้าของสินค้า/บริการได้ง่ายขึ้น เช่น การรับบัตรเครดิต การผ่อนชำระ"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "ร้านกาแฟนำเสนอ 'Oat Milk Latte' ซึ่งไม่เคยมีในเมนูก่อน เพื่อตอบสนองกลุ่มลูกค้าที่แพ้นมวัว — ขั้นตอนแรกของกระบวนการทางการตลาดที่ร้านนี้ทำคืออะไร?",
+    opts: ["กำหนดกลยุทธ์ STP", "วิเคราะห์ SWOT", "กำหนดผู้รับผิดชอบ", "ตั้งราคาผลิตภัณฑ์ใหม่"],
+    ans: 1,
+    exp: "กระบวนการทางการตลาดเริ่มจากการวิเคราะห์สภาพแวดล้อม (SWOT) เพื่อค้นพบโอกาสทางตลาด เช่น ค้นพบว่ามีลูกค้าที่แพ้นมวัวและต้องการทางเลือก"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "IKEA สร้างแอปให้ผู้บริโภค 'จัดเฟอร์นิเจอร์เสมือนจริง' ในบ้านผ่านกล้องมือถือก่อนซื้อ นับเป็นตัวอย่างของ Marketing กี่จุดทศนิยม?",
+    opts: ["Marketing 3.0", "Marketing 4.0", "Marketing 5.0", "Marketing 6.0"],
+    ans: 3,
+    exp: "Marketing 6.0 (The Immersive Future) ใช้เทคโนโลยี AR (Augmented Reality) เพื่อสร้างประสบการณ์ Immersive แบบเชื่อมโลกจริงและโลกเสมือน ซึ่ง IKEA Place app เป็นตัวอย่างคลาสสิก"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "Lush Cosmetics ใช้บรรจุภัณฑ์ที่ย่อยสลายได้ 100% และโฆษณาว่า 'Naked Products' ไม่ใช้พลาสติก — Marketing แนวคิดนี้อยู่ใน Era ใด?",
+    opts: ["Product Era", "Sales Era", "Societal Marketing Era", "Marketing Era"],
+    ans: 2,
+    exp: "Societal Marketing Era มุ่งเน้นความรับผิดชอบต่อสังคมและสิ่งแวดล้อม ไม่ใช่แค่ตอบสนองความต้องการลูกค้า แต่ยังคำนึงถึงสังคมในระยะยาว"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "ลูกค้าซื้อชุดออกกำลังกาย Lululemon เพราะรู้สึกว่าตนเองเป็น 'คนรักสุขภาพที่มีรสนิยม' — คุณค่านี้จัดอยู่ใน Value ใด?",
+    opts: ["Functional Value", "Epistemic Value", "Conditional Value", "Social Value"],
+    ans: 3,
+    exp: "Social Value คือคุณค่าที่สะท้อนภาพลักษณ์หรืออัตลักษณ์ทางสังคมของผู้บริโภค เช่น การซื้อแบรนด์เพื่อสะท้อนว่าตัวเองเป็นคนประเภทไหน"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "แมคโดนัลด์เปิดตัว McPlant Burger เพื่อตอบสนองเทรนด์ Vegan — นี่ตอบสนอง Needs หรือ Wants ของผู้บริโภค?",
+    opts: ["Needs ทางชีวภาพ", "Wants ที่ได้รับอิทธิพลจากเทรนด์สังคม", "Demand ที่มีกำลังซื้อ", "ทั้ง Needs และ Wants เท่ากัน"],
+    ans: 1,
+    exp: "Wants (ความอยาก) ได้รับอิทธิพลจากสังคม วัฒนธรรม และเทรนด์ ในที่นี้เทรนด์ Vegan / Plant-based ทำให้ผู้บริโภคอยากได้เบอร์เกอร์จากพืช ไม่ใช่ความต้องการชีวภาพพื้นฐาน"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "Spotify ส่งอีเมล 'Spotify Wrapped' สรุปเพลงที่ฟังตลอดปี — สิ่งนี้สร้าง Value ใดให้ผู้ใช้?",
+    opts: ["Conditional Value", "Epistemic Value", "Emotional Value", "Functional Value"],
+    ans: 2,
+    exp: "Emotional Value คือคุณค่าด้านความรู้สึก ความผูกพัน หรือความสนุก Spotify Wrapped ทำให้ผู้ใช้รู้สึกดี ตื่นเต้น และอยากแชร์ ซึ่งเป็น Emotional Value ที่แข็งแกร่งมาก"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "ร้านของฝากในเชียงใหม่ขายสินค้าเฉพาะในช่วงเทศกาลสงกรานต์เท่านั้น — ลูกค้าที่ซื้อเพราะ 'มีแค่ตอนนี้' เกิด Value ด้านใด?",
+    opts: ["Epistemic Value", "Functional Value", "Conditional Value", "Social Value"],
+    ans: 2,
+    exp: "Conditional Value เกิดจากสถานการณ์เฉพาะ เช่น ช่วงเทศกาล โปรโมชันจำกัดเวลา หรือสินค้า Limited Edition ที่กระตุ้นให้ผู้บริโภคซื้อแม้ปกติอาจไม่ซื้อ"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "Netflix ใช้ AI แนะนำซีรีส์ที่ผู้ใช้น่าจะชอบ — นี่เป็นตัวอย่างของ Marketing ในยุคใด?",
+    opts: ["Marketing 2.0", "Marketing 3.0", "Marketing 4.0", "Marketing 5.0"],
+    ans: 3,
+    exp: "Marketing 5.0 (Technology for Humanity) ใช้เทคโนโลยี AI เพื่อสร้างประสบการณ์ที่เป็นส่วนตัวและตอบสนองความต้องการมนุษย์ Netflix Recommendation Engine เป็นตัวอย่างที่ชัดเจน"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "บริษัทนมอินทผาลัมรายหนึ่งตั้งใจขายให้โรงพยาบาลเพื่อให้คนไข้ได้รับประทาน — นี่คือตลาดประเภทใด?",
+    opts: ["Consumer Market", "B2C Market", "B2B Market", "Government Market"],
+    ans: 2,
+    exp: "B2B Market (Business-to-Business) คือการขายสินค้า/บริการจากธุรกิจสู่ธุรกิจ การขายนมอินทผาลัมให้โรงพยาบาลเป็น B2B เพราะโรงพยาบาลเป็นองค์กรที่ซื้อเพื่อใช้ในบริการของตน"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "TOMS Shoes บริจาครองเท้า 1 คู่ให้คนยากจนทุกครั้งที่ขาย 1 คู่ — แนวคิดนี้อยู่ใน Marketing แนวทางใด?",
+    opts: ["Product Concept", "Selling Concept", "Marketing Concept", "Societal Marketing Concept"],
+    ans: 3,
+    exp: "Societal Marketing Concept คำนึงถึงประโยชน์ของสังคมในระยะยาว ไม่ใช่แค่ตอบสนองลูกค้า TOMS สร้างธุรกิจที่มีความรับผิดชอบต่อสังคมเป็นแกนกลาง"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "ลองจอง (Longchamp) ขายกระเป๋าราคาหมื่นกว่าบาท ทั้งที่ต้นทุนวัสดุไม่ถึงพัน — สิ่งที่ผู้บริโภคจ่ายเกินส่วนนี้คืออะไร?",
+    opts: ["ราคาสินค้า", "คุณค่าที่รับรู้ (Perceived Value)", "ต้นทุนการผลิต", "กำไรขั้นต้น"],
+    ans: 1,
+    exp: "Perceived Value คือคุณค่าที่ผู้บริโภครับรู้ ซึ่งอาจสูงกว่าต้นทุนจริงมาก เกิดจากแบรนด์ ภาพลักษณ์ และ Social Value ที่กระเป๋าแบรนด์มอบให้"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "การตลาดเชิงสาเหตุ (Cause-Related Marketing) ต่างจาก Societal Marketing อย่างไร?",
+    opts: ["เหมือนกันทุกประการ", "Cause Marketing ผูกติดกับการซื้อขาย Societal ไม่ผูกติด", "Societal Marketing ต้องการกำไร Cause Marketing ไม่ต้องการ", "Cause Marketing ทำเฉพาะ NGO เท่านั้น"],
+    ans: 1,
+    exp: "Cause-Related Marketing ผูกกิจกรรมสังคมกับยอดขายโดยตรง เช่น 'ทุกการซื้อ 1 ชิ้น บริจาค 10 บาท' ขณะที่ Societal Marketing เป็นแนวคิดองค์รวมที่คำนึงถึงสังคมในทุกกระบวนการ"
+  },
+  {
+    ch: "บทที่ 1 · โลกของการตลาด",
+    q: "จังหวัดน่านโปรโมทการท่องเที่ยวในธีม 'ธรรมชาติบริสุทธิ์' — นับเป็นการตลาดประเภทใด?",
+    opts: ["B2B Marketing", "Not-for-Profit Marketing", "Place Marketing", "Person Marketing"],
+    ans: 2,
+    exp: "Place Marketing คือการใช้เครื่องมือทางการตลาดเพื่อส่งเสริมสถานที่ ดึงดูดนักท่องเที่ยว นักลงทุน หรือผู้อยู่อาศัย จังหวัดน่านโปรโมทการท่องเที่ยวเป็นตัวอย่างที่ชัดเจน"
+  },
+
+  // ─── บทที่ 2 : สภาพแวดล้อมทางการตลาด (15 ข้อ) ───
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "กฎหมายห้ามโฆษณาบุหรี่บนสื่อสาธารณะ กระทบแผนการตลาดของบริษัทบุหรี่ — นี่คือสภาพแวดล้อมมหภาคด้านใด?",
+    opts: ["เศรษฐกิจ", "การเมืองและกฎหมาย", "สังคมและวัฒนธรรม", "เทคโนโลยี"],
+    ans: 1,
+    exp: "สภาพแวดล้อมด้านการเมืองและกฎหมาย (Political & Legal) ครอบคลุมกฎหมาย ระเบียบ นโยบายรัฐ และการบังคับใช้กฎหมายที่ส่งผลต่อธุรกิจ"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "อัตราดอกเบี้ยนโยบายที่ปรับสูงขึ้น ทำให้ยอดขายบ้านและรถยนต์ลดลง — นี่คือสภาพแวดล้อมด้านใด?",
+    opts: ["เทคโนโลยี", "ประชากรศาสตร์", "เศรษฐกิจ", "สังคมและวัฒนธรรม"],
+    ans: 2,
+    exp: "สภาพแวดล้อมด้านเศรษฐกิจ (Economic Environment) ได้แก่ อัตราดอกเบี้ย อัตราแลกเปลี่ยน GDP อัตราเงินเฟ้อ ล้วนส่งผลต่อกำลังซื้อของผู้บริโภค"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "ประเทศไทยเข้าสู่สังคมผู้สูงอายุ (Aging Society) — นักการตลาดควรวิเคราะห์สิ่งนี้ใน PEST/PESTEL ด้านใด?",
+    opts: ["P – การเมือง", "E – เศรษฐกิจ", "S – สังคมและประชากร", "T – เทคโนโลยี"],
+    ans: 2,
+    exp: "สภาพแวดล้อมด้านสังคมและประชากรศาสตร์ (Social/Demographic) รวมถึงโครงสร้างอายุ การเปลี่ยนแปลงประชากร รสนิยม และค่านิยมของสังคม"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "ร้านอาหารไทยในห้างฯ คู่แข่งใกล้เคียงที่สุดคืออะไร?",
+    opts: ["แบรนด์คู่แข่งทั่วไปในตลาดอาหาร", "ร้านอาหารไทยในห้างเดียวกัน", "ร้านอาหารทุกประเภทในห้างเดียวกัน", "ร้านอาหารที่ตั้งอยู่ใกล้ๆ ทั่วเมือง"],
+    ans: 1,
+    exp: "คู่แข่งที่ใกล้เคียงที่สุดคือ Brand Competitor ที่ขายสินค้าเดียวกัน ตรงกลุ่มเป้าหมายเดียวกัน ร้านอาหารไทยในห้างเดียวกันแย่งลูกค้าโดยตรงมากที่สุด"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "TikTok ทำให้คนใช้เวลากับมือถือนานขึ้น ส่งผลให้โฆษณาโทรทัศน์มีประสิทธิภาพลดลง — นี่คือสภาพแวดล้อมมหภาคด้านใด?",
+    opts: ["สังคมและวัฒนธรรม", "เทคโนโลยี", "เศรษฐกิจ", "กฎหมาย"],
+    ans: 1,
+    exp: "สภาพแวดล้อมด้านเทคโนโลยี (Technological Environment) รวมถึงนวัตกรรม แพลตฟอร์มดิจิทัล และการเปลี่ยนแปลงพฤติกรรมที่ขับเคลื่อนด้วยเทคโนโลยี"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "Supplier ของวัตถุดิบหลักขึ้นราคา 30% ทำให้ต้นทุนสินค้าพุ่งสูง — Supplier จัดเป็นสภาพแวดล้อมประเภทใด?",
+    opts: ["มหภาค (Macro)", "จุลภาค (Micro)", "ภายใน (Internal)", "ระดับโลก (Global)"],
+    ans: 1,
+    exp: "สภาพแวดล้อมจุลภาค (Micro Environment) ประกอบด้วยผู้มีส่วนได้ส่วนเสียที่ส่งผลโดยตรงต่อธุรกิจ ได้แก่ ลูกค้า คู่แข่ง Supplier ตัวกลาง และสาธารณชน"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "บริษัทเครื่องสำอางค้นพบว่ากลุ่มลูกค้า Gen Z ให้ความสำคัญกับส่วนผสม 'Clean Beauty' มากขึ้น — นี่เป็น Opportunity หรือ Threat?",
+    opts: ["Threat เพราะต้องเปลี่ยนสูตร", "Opportunity สำหรับบริษัทที่ปรับตัวได้", "Weakness ของบริษัท", "Strength ของบริษัท"],
+    ans: 1,
+    exp: "Opportunity (โอกาส) คือแนวโน้มภายนอกที่เป็นประโยชน์ต่อธุรกิจ เทรนด์ Clean Beauty เป็นโอกาสสำหรับแบรนด์ที่ปรับตัวเร็ว และ Threat สำหรับที่ยังไม่ปรับ"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "ห้างสรรพสินค้าแห่งหนึ่งมีพนักงานเชี่ยวชาญด้านสินค้าไอที 50 คน — นี่จัดเป็นอะไรใน SWOT?",
+    opts: ["Opportunity", "Threat", "Strength", "Weakness"],
+    ans: 2,
+    exp: "Strength (จุดแข็ง) คือทรัพยากรหรือความสามารถภายในที่โดดเด่นกว่าคู่แข่ง พนักงานผู้เชี่ยวชาญเป็นสินทรัพย์มนุษย์ที่เป็นจุดแข็ง"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "ร้านหนังสือเล็กๆ ไม่มีระบบขายออนไลน์ ขณะที่ลูกค้าหันมาซื้อบน Shopee มากขึ้น — ใน SWOT สิ่งนี้คืออะไร?",
+    opts: ["Strength", "Opportunity", "Weakness", "Threat"],
+    ans: 2,
+    exp: "Weakness (จุดอ่อน) คือข้อจำกัดภายในองค์กร การขาดช่องทางออนไลน์เมื่อตลาดเปลี่ยนไปเป็นดิจิทัลถือเป็นจุดอ่อนที่ต้องแก้ไข"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "กฎหมาย PDPA (Personal Data Protection Act) ส่งผลให้บริษัทเก็บข้อมูลลูกค้าได้น้อยลง — สำหรับบริษัท AdTech นี่คืออะไรใน SWOT?",
+    opts: ["Strength", "Weakness", "Opportunity", "Threat"],
+    ans: 3,
+    exp: "Threat (อุปสรรค) คือแนวโน้มหรือปัจจัยภายนอกที่อาจส่งผลเสียต่อธุรกิจ PDPA จำกัดการเก็บข้อมูลซึ่งเป็นหัวใจของ AdTech จึงเป็น Threat"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "TOWS Matrix ต่างจาก SWOT Analysis ตรงที่ไหน?",
+    opts: ["ใช้ปัจจัยภายนอกเท่านั้น", "วิเคราะห์คู่แข่งเป็นหลัก", "นำ SW & OT มาจับคู่สร้างกลยุทธ์", "เน้นวิเคราะห์ทางการเงิน"],
+    ans: 2,
+    exp: "TOWS Matrix นำจุดแข็ง-จุดอ่อน (SW) มาจับคู่กับโอกาส-อุปสรรค (OT) เพื่อสร้างกลยุทธ์ 4 แบบ: SO, ST, WO, WT ซึ่ง SWOT แค่ระบุปัจจัย แต่ไม่ได้สร้างกลยุทธ์"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "แฟชั่นเสื้อผ้า 'Slow Fashion' กำลังได้รับความนิยมมากขึ้นในกลุ่มคนรุ่นใหม่ — สำหรับแบรนด์ Fast Fashion นี่คืออะไร?",
+    opts: ["โอกาสในการขยายตลาด", "จุดแข็งของแบรนด์", "อุปสรรคทางสังคม-วัฒนธรรม", "จุดอ่อนด้านการตลาด"],
+    ans: 2,
+    exp: "การเปลี่ยนค่านิยมของผู้บริโภคเป็น Threat จากสภาพแวดล้อมสังคม-วัฒนธรรม ซึ่งอยู่นอกเหนือการควบคุมของแบรนด์แต่ส่งผลกระทบโดยตรง"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "บริษัทน้ำดื่มต้องปฏิบัติตามมาตรฐาน อย. และ มอก. — นี่คือสภาพแวดล้อมมหภาคด้านใด?",
+    opts: ["เศรษฐกิจ", "เทคโนโลยี", "กฎหมายและการเมือง", "ประชากรศาสตร์"],
+    ans: 2,
+    exp: "มาตรฐาน อย. (สำนักงานคณะกรรมการอาหารและยา) และ มอก. (มาตรฐานผลิตภัณฑ์อุตสาหกรรม) เป็นกฎระเบียบภาครัฐ จัดอยู่ในสภาพแวดล้อมด้านกฎหมายและการเมือง"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "พนักงานขายตรงของบริษัทประกันชีวิตคือใครในระบบการตลาด?",
+    opts: ["Supplier", "Marketing Intermediary", "Competitor", "Target Customer"],
+    ans: 1,
+    exp: "Marketing Intermediary (ตัวกลางทางการตลาด) คือผู้ช่วยในการกระจาย ขาย หรือส่งเสริมสินค้า/บริการ พนักงานขายตรงทำหน้าที่เชื่อมระหว่างบริษัทกับลูกค้า"
+  },
+  {
+    ch: "บทที่ 2 · สภาพแวดล้อมทางการตลาด",
+    q: "วิกฤต COVID-19 ทำให้ตลาดอีคอมเมิร์ซเติบโตพุ่งสูง — สำหรับ Shopee นี่คืออะไร?",
+    opts: ["Weakness", "Threat", "Opportunity", "Strength"],
+    ans: 2,
+    exp: "Opportunity คือปัจจัยภายนอกที่เป็นประโยชน์ วิกฤตโควิดเป็นโอกาสทองของ E-commerce เพราะผู้บริโภคหันมาช้อปออนไลน์มากขึ้นอย่างก้าวกระโดด"
+  },
+
+  // ─── บทที่ 3 : กลยุทธ์ทางการตลาด (17 ข้อ) ───
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "Rolls-Royce ขายรถเพียง 6,000 คันต่อปีทั่วโลก แต่ราคาเริ่มต้นหลายล้านบาท — นี่คือกลยุทธ์ STP แบบใด?",
+    opts: ["Undifferentiated Marketing", "Differentiated Marketing", "Concentrated Marketing", "Micromarketing"],
+    ans: 2,
+    exp: "Concentrated Marketing (Niche Marketing) คือการมุ่งเน้นตลาดส่วนเดียวที่เฉพาะเจาะจงมากๆ Rolls-Royce เลือก Segment เดียว คือผู้มั่งคั่งระดับสูงสุด"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "Coca-Cola ขายสินค้าเหมือนกันทั่วโลก ไม่แยกตาม Segment — นี่คือกลยุทธ์อะไร?",
+    opts: ["Concentrated Marketing", "Differentiated Marketing", "Undifferentiated Marketing", "Micromarketing"],
+    ans: 2,
+    exp: "Undifferentiated Marketing (Mass Marketing) ถือว่าตลาดทั้งหมดมีความต้องการคล้ายกัน ใช้ Marketing Mix เดียวกับทุก Segment ประหยัดต้นทุน แต่อาจพลาดความต้องการเฉพาะกลุ่ม"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "Nike ออกรองเท้าสายวิ่ง สายบาสเกตบอล และสายแฟชั่น แยกกัน — นี่คือกลยุทธ์อะไร?",
+    opts: ["Undifferentiated Marketing", "Differentiated Marketing", "Concentrated Marketing", "Micromarketing"],
+    ans: 1,
+    exp: "Differentiated Marketing เลือกหลาย Segment และพัฒนา Marketing Mix ที่แตกต่างกันสำหรับแต่ละ Segment ทำให้ตอบสนองความต้องการได้ครอบคลุมขึ้น"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "ร้านเบเกอรี่แนะนำเค้กแบบ 'Made-to-Order' ที่ออกแบบตามใจลูกค้าแต่ละคน — นี่คือกลยุทธ์ Targeting ระดับใด?",
+    opts: ["Undifferentiated", "Differentiated", "Concentrated", "Micromarketing / One-to-One"],
+    ans: 3,
+    exp: "Micromarketing / Individual Marketing เป็นการกำหนดเป้าหมายถึงระดับบุคคล ปรับแต่งสินค้าและการสื่อสารให้ตรงความต้องการของลูกค้าแต่ละคน"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "วิตามินน้ำ 'เชื่อมั่นในตัวเอง สดชื่นทุกวัน' — นี่คือการ Positioning แบบใด?",
+    opts: ["Positioning by Price", "Positioning by Benefits", "Positioning by User", "Positioning by Competitor"],
+    ans: 1,
+    exp: "Positioning by Benefits เน้นประโยชน์ที่ผู้บริโภคจะได้รับ 'สดชื่น' เป็น Functional Benefit ส่วน 'เชื่อมั่นในตัวเอง' เป็น Emotional Benefit"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "7-Eleven วางตำแหน่งตัวเองว่า 'ร้านค้าสะดวกซื้อที่ใกล้บ้านคุณที่สุด' — นี่คือ Positioning แบบใด?",
+    opts: ["Positioning by Benefits", "Positioning by Quality", "Positioning by Distribution", "Positioning by Use"],
+    ans: 2,
+    exp: "Positioning by Distribution/Access เน้นความสะดวกในการเข้าถึง เป็นการวางตำแหน่งที่เน้นช่องทางการจัดจำหน่ายและความใกล้ชิดกับผู้บริโภค"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "Pepsi ใช้สโลแกน 'The Choice of a New Generation' เพื่อต่อต้าน Coke — นี่คือ Positioning แบบใด?",
+    opts: ["Positioning by Price", "Positioning by Benefits", "Positioning vs Competitor", "Positioning by Quality"],
+    ans: 2,
+    exp: "Positioning vs Competitor (Competitive Positioning) เป็นการวางตำแหน่งเปรียบเทียบกับคู่แข่งโดยตรง Pepsi สร้างภาพว่าตัวเองคือตัวเลือกของคนรุ่นใหม่ ขณะที่ Coke เป็นของคนรุ่นเก่า"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "บริษัทต้องการขยายตลาดโดยขายสินค้าเดิมให้ลูกค้ากลุ่มใหม่ — ใน Ansoff Matrix นี่คือกลยุทธ์ใด?",
+    opts: ["Market Penetration", "Market Development", "Product Development", "Diversification"],
+    ans: 1,
+    exp: "Ansoff Matrix: Market Development = สินค้าเดิม + ตลาดใหม่ เช่น ขายสินค้าในประเทศใหม่ หรือเจาะกลุ่มลูกค้าใหม่ที่ยังไม่เคยซื้อ"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "KFC เพิ่มเมนู 'ข้าวไก่ทอดหน้าไข่' ขึ้นมาใหม่ในไทย — ใน Ansoff Matrix นี่คือกลยุทธ์ใด?",
+    opts: ["Market Penetration", "Market Development", "Product Development", "Diversification"],
+    ans: 2,
+    exp: "Product Development = สินค้าใหม่ + ตลาดเดิม KFC พัฒนาเมนูใหม่เพื่อดึงดูดลูกค้าเดิมในตลาดไทยที่มีอยู่แล้ว"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "Amazon เริ่มต้นจากร้านหนังสือออนไลน์ แล้วขยายไป AWS, Amazon Prime, Alexa — ใน Ansoff Matrix นี่คือกลยุทธ์ใด?",
+    opts: ["Market Penetration", "Market Development", "Product Development", "Diversification"],
+    ans: 3,
+    exp: "Diversification = สินค้าใหม่ + ตลาดใหม่ มีความเสี่ยงสูงที่สุดแต่ศักยภาพสูงสุด Amazon ขยายเข้าสู่ธุรกิจ Cloud, Streaming, Smart Home ซึ่งต่างจากธุรกิจเดิมมาก"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "Shopee ลดค่าธรรมเนียมแม่ค้าและเพิ่มงบโฆษณาเพื่อแย่งส่วนแบ่งตลาดจาก Lazada — ใน Ansoff Matrix นี่คือกลยุทธ์ใด?",
+    opts: ["Market Penetration", "Market Development", "Product Development", "Diversification"],
+    ans: 0,
+    exp: "Market Penetration = สินค้าเดิม + ตลาดเดิม มุ่งเพิ่มส่วนแบ่งตลาดในตลาดปัจจุบัน เช่น โปรโมชันแรงขึ้น ลดราคา หรือเพิ่มการตลาดมากขึ้น"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "ใน BCG Matrix ธุรกิจที่มีส่วนแบ่งตลาดสูงแต่ตลาดกำลังเติบโตช้า เรียกว่าอะไร?",
+    opts: ["Stars", "Question Marks", "Cash Cows", "Dogs"],
+    ans: 2,
+    exp: "Cash Cows มีส่วนแบ่งตลาดสูง แต่อยู่ในตลาดเติบโตต่ำ สร้างกำไรสม่ำเสมอ ใช้งบลงทุนน้อย เช่น ผลิตภัณฑ์ที่เป็น Market Leader ในตลาดที่อิ่มตัวแล้ว"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "สตาร์ทอัพที่เพิ่งเข้าตลาด AI ที่กำลังเติบโตสูง แต่ยังไม่มีส่วนแบ่งตลาดมาก — อยู่ในช่อง BCG ใด?",
+    opts: ["Stars", "Cash Cows", "Question Marks", "Dogs"],
+    ans: 2,
+    exp: "Question Marks มีตลาดเติบโตสูงแต่ส่วนแบ่งตลาดต่ำ ต้องตัดสินใจว่าจะลงทุนเพิ่มเพื่อให้เป็น Stars หรือถอนตัว"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "Porter's Generic Strategies กลยุทธ์ 'Cost Leadership' คืออะไร?",
+    opts: ["เน้นนวัตกรรมผลิตภัณฑ์", "เป็นผู้ผลิตที่ต้นทุนต่ำที่สุดในอุตสาหกรรม", "มุ่งเน้นตลาดเฉพาะกลุ่ม", "สร้างความแตกต่างด้วยแบรนด์"],
+    ans: 1,
+    exp: "Cost Leadership Strategy คือการเป็นผู้ผลิตที่มีต้นทุนต่ำที่สุดในอุตสาหกรรม ทำให้แข่งขันด้านราคาได้หรือได้กำไรสูงกว่าคู่แข่งที่ราคาเท่ากัน เช่น IKEA, Walmart"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "Apple ขายสมาร์ทโฟนราคาสูงกว่าคู่แข่ง แต่ลูกค้ายังซื้อเพราะเชื่อว่า 'คุณค่าสูงกว่า' — นี่คือกลยุทธ์ Porter ใด?",
+    opts: ["Cost Leadership", "Focus Strategy", "Differentiation Strategy", "Blue Ocean Strategy"],
+    ans: 2,
+    exp: "Differentiation Strategy สร้างผลิตภัณฑ์หรือบริการที่แตกต่างและมีคุณค่าสูงในสายตาลูกค้า ทำให้ตั้งราคาพรีเมียมได้ Apple ใช้ Design, Ecosystem และ Brand Image"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "Rolex ขายเฉพาะนาฬิกาหรูแก่กลุ่มลูกค้าที่ร่ำรวย ไม่ขายสินค้าราคาถูก — นี่คือกลยุทธ์ Porter ใด?",
+    opts: ["Cost Leadership", "Differentiation", "Differentiation Focus", "Cost Focus"],
+    ans: 2,
+    exp: "Differentiation Focus คือการสร้างความแตกต่างในตลาดเฉพาะส่วน (Niche) Rolex มุ่งเน้น Segment ผู้มั่งคั่ง และสร้าง Differentiation ด้วยคุณภาพและ Prestige"
+  },
+  {
+    ch: "บทที่ 3 · กลยุทธ์ทางการตลาด",
+    q: "Netflix และ Spotify สร้างตลาดใหม่ด้วยบริการ Streaming ทำให้ Blockbuster และร้านซีดีล้มหายไป — นี่คือกลยุทธ์ใด?",
+    opts: ["Porter's Cost Leadership", "Blue Ocean Strategy", "BCG Matrix", "Ansoff Diversification"],
+    ans: 1,
+    exp: "Blue Ocean Strategy คือการสร้างตลาดใหม่ที่ไม่มีคู่แข่ง (Uncontested Market Space) แทนที่จะแข่งขันใน Red Ocean Netflix/Spotify สร้างรูปแบบธุรกิจใหม่ทั้งหมด"
+  },
+
+  // ─── บทที่ 4 : ระบบสารสนเทศทางการตลาด (18 ข้อ) ───
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "ข้อมูลที่บริษัทเก็บรวบรวมจากใบเสร็จการขาย ข้อมูลลูกค้าในระบบ CRM — จัดเป็น Data ประเภทใด?",
+    opts: ["External Secondary Data", "External Primary Data", "Internal Secondary Data", "Internal Primary Data"],
+    ans: 2,
+    exp: "Internal Secondary Data คือข้อมูลที่มีอยู่ในองค์กรแล้ว เก็บไว้เพื่อวัตถุประสงค์อื่น แต่นำมาวิเคราะห์เพื่อการตลาดได้ เช่น ข้อมูลการขาย ข้อมูลลูกค้า"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "รายงานของ Nielsen เกี่ยวกับส่วนแบ่งตลาดเครื่องดื่ม — จัดเป็น Data ประเภทใด?",
+    opts: ["Internal Secondary Data", "External Secondary Data", "Internal Primary Data", "External Primary Data"],
+    ans: 1,
+    exp: "External Secondary Data คือข้อมูลที่ถูกรวบรวมและเผยแพร่โดยองค์กรภายนอก ไม่ใช่ข้อมูลที่เก็บเองโดยตรง เช่น รายงาน Nielsen, ข้อมูลสถาบันวิจัยภายนอก"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "บริษัทส่งทีมออกไปสัมภาษณ์ลูกค้าเกี่ยวกับผลิตภัณฑ์ใหม่ — จัดเป็น Data ประเภทใด?",
+    opts: ["Internal Secondary Data", "External Secondary Data", "Internal Primary Data", "External Primary Data"],
+    ans: 3,
+    exp: "External Primary Data คือข้อมูลที่เก็บจากแหล่งภายนอก (ลูกค้า) โดยตรง เพื่อวัตถุประสงค์การวิจัยนั้นๆ โดยเฉพาะ"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "MIS (Marketing Information System) ประกอบด้วยส่วนประกอบสำคัญกี่ส่วน และอะไรบ้าง?",
+    opts: ["2 ส่วน: Internal Records + Marketing Intelligence", "3 ส่วน: Internal Records, Marketing Intelligence, Marketing Research", "4 ส่วน: รวม Decision Support System", "5 ส่วน: รวม Big Data Analytics"],
+    ans: 2,
+    exp: "MIS ประกอบด้วย 3 ส่วนหลัก: (1) Internal Records System – ข้อมูลภายในบริษัท (2) Marketing Intelligence System – ติดตามข้อมูลสภาพแวดล้อม (3) Marketing Research System – การวิจัยเฉพาะเรื่อง"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "ผู้จัดการการตลาดอ่านนิตยสารอุตสาหกรรม ติดตาม LinkedIn และคุยกับ Supplier เพื่อรับรู้ความเคลื่อนไหวของตลาด — นี่คือส่วนไหนของ MIS?",
+    opts: ["Internal Records System", "Marketing Research System", "Marketing Intelligence System", "Decision Support System"],
+    ans: 2,
+    exp: "Marketing Intelligence System คือการเก็บข้อมูลสภาพแวดล้อมอย่างต่อเนื่อง ทั้งจากการอ่านข่าว ติดตามคู่แข่ง สัมภาษณ์ผู้เกี่ยวข้อง เพื่อตอบสนองต่อการเปลี่ยนแปลงได้ทัน"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "ข้อมูล Big Data ที่มีลักษณะ 'เกิดขึ้นเร็ว ต้องประมวลผลเร็ว' ตรงกับ V ใดของ 5V?",
+    opts: ["Volume", "Velocity", "Variety", "Veracity"],
+    ans: 1,
+    exp: "5V ของ Big Data: Volume (ปริมาณมหาศาล), Velocity (ความเร็วในการเกิดและประมวลผล), Variety (ความหลากหลายรูปแบบ), Veracity (ความน่าเชื่อถือ), Value (คุณค่า)"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "ข้อมูล Social Media ที่มีทั้งรูปภาพ วีดิโอ ข้อความ และตัวเลข — ตรงกับ V ใดของ Big Data?",
+    opts: ["Volume", "Velocity", "Variety", "Value"],
+    ans: 2,
+    exp: "Variety คือความหลากหลายของรูปแบบข้อมูล ทั้ง Structured (ตาราง), Semi-structured (JSON, XML) และ Unstructured (รูปภาพ วีดิโอ ข้อความ)"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "Amazon ใช้ประวัติการซื้อและการค้นหาของลูกค้าแต่ละคนเพื่อแนะนำสินค้า — นี่คือการใช้ Data Analytics แบบใด?",
+    opts: ["Descriptive Analytics", "Diagnostic Analytics", "Predictive Analytics", "Prescriptive Analytics"],
+    ans: 2,
+    exp: "Predictive Analytics ใช้ข้อมูลอดีตและ Machine Learning เพื่อทำนายพฤติกรรมในอนาคต เช่น คาดการณ์ว่าลูกค้าน่าจะสนใจสินค้าใด"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "บริษัทวิเคราะห์ว่า 'เดือนที่แล้วยอดขายลดลง 15%' — นี่คือ Analytics แบบใด?",
+    opts: ["Descriptive Analytics", "Diagnostic Analytics", "Predictive Analytics", "Prescriptive Analytics"],
+    ans: 0,
+    exp: "Descriptive Analytics อธิบายสิ่งที่เกิดขึ้น (What happened?) โดยสรุปข้อมูลที่ผ่านมา ใช้เครื่องมือ Dashboard, Report, KPI"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "CRM ย่อมาจากอะไร และมีประโยชน์หลักอย่างไร?",
+    opts: ["Customer Revenue Management – วัดรายได้จากลูกค้า", "Customer Relationship Management – บริหารความสัมพันธ์กับลูกค้า", "Consumer Research Method – วิจัยผู้บริโภค", "Customer Retention Model – โมเดลรักษาลูกค้า"],
+    ans: 1,
+    exp: "CRM (Customer Relationship Management) คือระบบบริหารความสัมพันธ์กับลูกค้า เก็บประวัติการซื้อ การสื่อสาร และพฤติกรรม เพื่อให้บริการที่ตรงใจลูกค้าแต่ละคน"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "Starbucks Rewards App เก็บข้อมูลการซื้อเครื่องดื่มของสมาชิกทุกครั้ง — ข้อมูลนี้ใช้ประโยชน์อะไรได้มากที่สุด?",
+    opts: ["กำหนดราคาขาย", "วิเคราะห์ต้นทุนการผลิต", "Personalized Marketing และ Loyalty Program", "จัดทำรายงานการเงิน"],
+    ans: 2,
+    exp: "ข้อมูลจาก Loyalty App ใช้สร้าง Personalized Offer เช่น ส่ง Coupon เครื่องดื่มที่ลูกค้าชอบ หรือแนะนำเมนูใหม่ตามรสนิยม ช่วยเพิ่ม Customer Lifetime Value"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "การวิเคราะห์ 'ทำไมยอดขายเดือนมีนาคมถึงลดลง' — นี่คือ Analytics แบบใด?",
+    opts: ["Descriptive", "Diagnostic", "Predictive", "Prescriptive"],
+    ans: 1,
+    exp: "Diagnostic Analytics ค้นหาสาเหตุ (Why did it happen?) โดยเจาะลึกข้อมูลเพื่อหาว่าอะไรทำให้เกิดเหตุการณ์นั้น เช่น เปรียบเทียบช่วงเวลา หาความสัมพันธ์"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "ระบบ AI แนะนำว่า 'บริษัทควรเพิ่มงบโฆษณา Instagram 20% ในเดือนหน้าเพื่อเพิ่มยอดขาย' — นี่คือ Analytics แบบใด?",
+    opts: ["Descriptive", "Diagnostic", "Predictive", "Prescriptive"],
+    ans: 3,
+    exp: "Prescriptive Analytics แนะนำการกระทำที่เหมาะสม (What should we do?) เป็นระดับสูงสุดของ Analytics ที่ไม่แค่ทำนายแต่ยังบอกว่าควรทำอะไร"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "Social Listening คืออะไร?",
+    opts: ["การฟังลูกค้าในร้านค้า", "การติดตามและวิเคราะห์การสนทนาเกี่ยวกับแบรนด์บนโซเชียลมีเดีย", "การสัมภาษณ์ลูกค้าทาง Social Media", "การส่งแบบสอบถามผ่าน Line"],
+    ans: 1,
+    exp: "Social Listening คือการใช้เครื่องมือติดตามและวิเคราะห์การสนทนาเกี่ยวกับแบรนด์ คู่แข่ง หรืออุตสาหกรรมบนโซเชียลมีเดีย เพื่อทำความเข้าใจ Sentiment ของผู้บริโภค"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "Customer Lifetime Value (CLV) คำนวณจากอะไรเป็นหลัก?",
+    opts: ["กำไรต่อปี × จำนวนลูกค้า", "มูลค่าเฉลี่ยที่ลูกค้าจะสร้างให้บริษัทตลอดระยะเวลาที่เป็นลูกค้า", "ต้นทุนในการหาลูกค้าใหม่", "ยอดซื้อสูงสุดของลูกค้าในปีหนึ่ง"],
+    ans: 1,
+    exp: "CLV = มูลค่ารวมที่ลูกค้าจะสร้างรายได้ให้บริษัทตลอดช่วงที่เป็นลูกค้า ช่วยตัดสินใจว่าควรลงทุนรักษาลูกค้ากลุ่มใดมากที่สุด"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "บริษัทพบว่าลูกค้า 20% สร้างรายได้ 80% ของยอดขายทั้งหมด — หลักการนี้เรียกว่าอะไร?",
+    opts: ["Long Tail Theory", "Pareto Principle (80/20 Rule)", "Normal Distribution", "BCG Rule"],
+    ans: 1,
+    exp: "Pareto Principle หรือ 80/20 Rule บอกว่า 80% ของผลลัพธ์มักมาจาก 20% ของสาเหตุ ในการตลาดหมายถึงลูกค้าส่วนน้อยสร้างรายได้ส่วนใหญ่"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "ข้อจำกัดสำคัญของการใช้ Secondary Data คืออะไร?",
+    opts: ["เสียค่าใช้จ่ายสูงมาก", "อาจไม่ตรงกับวัตถุประสงค์การวิจัยและข้อมูลอาจล้าสมัย", "ใช้เวลานานในการเก็บรวบรวม", "ต้องการทักษะพิเศษในการเก็บข้อมูล"],
+    ans: 1,
+    exp: "ข้อจำกัดของ Secondary Data คือ: (1) อาจไม่ตรงกับวัตถุประสงค์หรือคำถามวิจัยของเรา (2) ข้อมูลอาจเก่าหรือล้าสมัย (3) อาจมีนิยามที่แตกต่างจากที่เราต้องการ"
+  },
+  {
+    ch: "บทที่ 4 · ระบบสารสนเทศทางการตลาด",
+    q: "Dashboard Marketing ที่แสดง KPI ต่างๆ เช่น CTR, Conversion Rate, ROAS — ใช้สนับสนุนส่วนไหนของ MIS?",
+    opts: ["Internal Records", "Marketing Intelligence", "Marketing Research", "Decision Support"],
+    ans: 3,
+    exp: "Decision Support System ใน MIS ช่วยผู้บริหารตัดสินใจโดยนำเสนอข้อมูลเชิงวิเคราะห์ผ่าน Dashboard, Visualization ทำให้เห็นภาพรวมและตัดสินใจได้รวดเร็ว"
+  },
+
+  // ─── บทที่ 5 : การวิจัยการตลาด (17 ข้อ) ───
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "บริษัทต้องการทราบว่า 'ผู้บริโภคไทยมีทัศนคติต่อผลิตภัณฑ์ Vegan อย่างไร?' — นี่คือการวิจัยประเภทใด?",
+    opts: ["Quantitative Research", "Qualitative Research", "Experimental Research", "Observational Research"],
+    ans: 1,
+    exp: "Qualitative Research มุ่งทำความเข้าใจเชิงลึกเกี่ยวกับความคิด ความรู้สึก ทัศนคติ เหมาะสำหรับคำถาม 'ทำไม' และ 'อย่างไร' มักใช้ Focus Group หรือ In-depth Interview"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "แบบสอบถามออนไลน์ถาม 500 คนว่า 'พอใจกับบริการ 1-10 คะแนน?' — นี่คือการวิจัยประเภทใด?",
+    opts: ["Qualitative Research", "Experimental Research", "Quantitative Research", "Ethnographic Research"],
+    ans: 2,
+    exp: "Quantitative Research เก็บข้อมูลเชิงตัวเลขจากกลุ่มตัวอย่างขนาดใหญ่ เพื่อวิเคราะห์ทางสถิติ ตอบคำถาม 'กี่คน' 'เท่าไร' 'มากน้อยแค่ไหน'"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "A/B Testing โฆษณา 2 แบบ เพื่อดูว่าแบบไหน CTR สูงกว่า — นี่คือการวิจัยประเภทใด?",
+    opts: ["Descriptive Research", "Exploratory Research", "Causal Research", "Observational Research"],
+    ans: 2,
+    exp: "Causal Research (Experimental Research) ทดสอบความสัมพันธ์เชิงสาเหตุและผล (Cause & Effect) A/B Testing เป็นการทดลองเพื่อหาว่าตัวแปรใดทำให้ผลลัพธ์เปลี่ยน"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "ขั้นตอนแรกของกระบวนการวิจัยการตลาดคืออะไร?",
+    opts: ["เก็บข้อมูล", "กำหนดปัญหา/วัตถุประสงค์การวิจัย", "วิเคราะห์ข้อมูล", "รายงานผล"],
+    ans: 1,
+    exp: "กระบวนการวิจัยการตลาด: (1) กำหนดปัญหา/วัตถุประสงค์ → (2) ออกแบบการวิจัย → (3) เก็บข้อมูล → (4) วิเคราะห์ข้อมูล → (5) นำเสนอผล ขั้นตอนแรกสำคัญที่สุด ถ้ากำหนดผิดทุกอย่างผิด"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "นักวิจัยไปนั่งในร้านกาแฟเพื่อสังเกตพฤติกรรมลูกค้าโดยไม่บอกว่าตัวเองเป็นนักวิจัย — นี่คือวิธีเก็บข้อมูลแบบใด?",
+    opts: ["Focus Group", "In-depth Interview", "Ethnographic Observation", "Survey"],
+    ans: 2,
+    exp: "Ethnographic Observation คือการสังเกตพฤติกรรมในสภาพแวดล้อมจริงโดยไม่แทรกแซง ได้ข้อมูลพฤติกรรมจริงที่ผู้ถูกสังเกตอาจไม่รู้ตัวหรือไม่บอกตามจริง"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "Focus Group ต่างจาก In-depth Interview อย่างไร?",
+    opts: ["Focus Group ใช้แบบสอบถาม In-depth Interview ไม่ใช้", "Focus Group มีผู้เข้าร่วม 6-10 คน ระดมความคิด In-depth Interview สัมภาษณ์คนเดียวเชิงลึก", "ทั้งสองเหมือนกันทุกประการ", "Focus Group ใช้ข้อมูลเชิงตัวเลข In-depth Interview ใช้ข้อมูลเชิงคุณภาพ"],
+    ans: 1,
+    exp: "Focus Group: สัมภาษณ์กลุ่ม 6-10 คน ใช้ปฏิสัมพันธ์กระตุ้นความคิด เหมาะทดสอบโฆษณา แนวคิดผลิตภัณฑ์ | In-depth Interview: สัมภาษณ์ทีละคนอย่างลึกซึ้ง เหมาะหัวข้อละเอียดอ่อน"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "ข้อดีหลักของการสุ่มตัวอย่างแบบ Random Sampling คืออะไร?",
+    opts: ["ประหยัดเวลาและค่าใช้จ่าย", "ทุกคนในประชากรมีโอกาสถูกเลือกเท่ากัน ลดอคติ", "ได้ข้อมูลเชิงลึกมากกว่า", "เหมาะกับประชากรขนาดเล็ก"],
+    ans: 1,
+    exp: "Random Sampling ทุกหน่วยในประชากรมีโอกาสถูกเลือกเท่ากัน ทำให้ผลการวิจัยเป็นตัวแทนประชากรได้ดี มีความน่าเชื่อถือทางสถิติสูง"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "Likert Scale 1-5 (เห็นด้วยมากที่สุด - ไม่เห็นด้วยเลย) เป็น Scale ประเภทใด?",
+    opts: ["Nominal Scale", "Ordinal Scale", "Interval Scale", "Ratio Scale"],
+    ans: 2,
+    exp: "Interval Scale มีช่วงห่างเท่ากัน บวกลบได้มีความหมาย แต่ไม่มีศูนย์แท้ Likert Scale ในทางปฏิบัติมักถือเป็น Interval Scale แม้บางนักวิชาการจัดว่าเป็น Ordinal"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "ร้านค้าออนไลน์ติดตาม Heatmap ว่าลูกค้า Click ส่วนไหนของเว็บไซต์มากที่สุด — นี่คือการวิจัยแบบใด?",
+    opts: ["Survey Research", "Experimental Research", "Observational Research", "Interview Research"],
+    ans: 2,
+    exp: "Observational Research สังเกตและบันทึกพฤติกรรมลูกค้าโดยตรง Heatmap, Eye-tracking, Clickstream เป็นเครื่องมือสังเกตพฤติกรรม Digital"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "ข้อจำกัดสำคัญของ Qualitative Research คืออะไร?",
+    opts: ["ค่าใช้จ่ายสูงมาก", "ไม่สามารถ Generalize ผลไปยังประชากรส่วนใหญ่ได้", "ใช้เวลานานเกินไป", "ต้องการซอฟต์แวร์พิเศษ"],
+    ans: 1,
+    exp: "Qualitative Research ใช้ขนาดตัวอย่างเล็ก ไม่สามารถนำผลไปสรุปเป็นตัวแทนประชากรทั้งหมดได้ (ไม่ Generalizable) แต่ได้ความลึกและความเข้าใจเชิง Insight"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "Conjoint Analysis ใช้ในการวิจัยเรื่องอะไร?",
+    opts: ["วัดความพึงพอใจของพนักงาน", "ทดสอบประสิทธิภาพโฆษณา", "วิเคราะห์ว่าลูกค้าให้คุณค่ากับ Attribute ใดของสินค้ามากที่สุด", "วัดขนาดของตลาด"],
+    ans: 2,
+    exp: "Conjoint Analysis วิเคราะห์ว่าลูกค้าให้น้ำหนัก (Trade-off) กับคุณสมบัติต่างๆ ของสินค้ามากน้อยแค่ไหน เช่น ราคา คุณภาพ แบรนด์ สี ช่วยออกแบบผลิตภัณฑ์ที่ตรงใจ"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "Net Promoter Score (NPS) วัดอะไร?",
+    opts: ["กำไรต่อหน่วย", "ความน่าจะเป็นที่ลูกค้าจะแนะนำแบรนด์ให้คนอื่น", "ส่วนแบ่งตลาด", "อัตราการรักษาลูกค้า"],
+    ans: 1,
+    exp: "NPS ถามว่า 'คุณน่าจะแนะนำเราให้เพื่อน/ครอบครัวมากแค่ไหน? (0-10)' แบ่งเป็น Promoters (9-10), Passives (7-8), Detractors (0-6) NPS = %Promoters - %Detractors"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "Respondent Bias คืออะไรในการวิจัย?",
+    opts: ["ความผิดพลาดในการสุ่มตัวอย่าง", "ผู้ตอบให้คำตอบที่คิดว่าผู้วิจัยอยากได้ยิน ไม่ใช่ความจริง", "ข้อมูลที่เก็บได้ไม่ครบ", "การเลือกกลุ่มตัวอย่างผิด"],
+    ans: 1,
+    exp: "Respondent Bias (Social Desirability Bias) เกิดเมื่อผู้ตอบตอบตามที่คิดว่าถูกต้องทางสังคมหรือตามที่ผู้วิจัยอยากได้ยิน ไม่ใช่ความคิดเห็นจริง"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "การวิจัยแบบ Longitudinal Study ต่างจาก Cross-sectional Study อย่างไร?",
+    opts: ["Longitudinal ใช้กลุ่มตัวอย่างใหญ่กว่า", "Longitudinal ติดตามกลุ่มตัวอย่างเดิมในช่วงเวลายาวนาน Cross-sectional เก็บข้อมูลครั้งเดียว", "ทั้งสองเหมือนกัน", "Cross-sectional ใช้เวลานานกว่า"],
+    ans: 1,
+    exp: "Longitudinal Study ติดตามกลุ่มตัวอย่างเดิมในช่วงเวลายาวนาน เพื่อดูการเปลี่ยนแปลง ส่วน Cross-sectional เก็บข้อมูลจากกลุ่มตัวอย่างหลากหลายในช่วงเวลาเดียว"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "Neuromarketing ใช้เครื่องมือใดในการวิจัยพฤติกรรมผู้บริโภค?",
+    opts: ["แบบสอบถามออนไลน์", "สัมภาษณ์เชิงลึก", "fMRI, Eye Tracking, EEG วัดการตอบสนองสมองและร่างกาย", "การทดลองในห้องแล็บทั่วไป"],
+    ans: 2,
+    exp: "Neuromarketing ใช้เทคโนโลยีวัดการตอบสนองของสมองและร่างกาย เช่น fMRI (วัด Brain Activity), Eye Tracking (ติดตามสายตา), EEG (วัดคลื่นสมอง) เพื่อเข้าใจการตัดสินใจ Unconscious"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "บริษัทต้องการทราบว่าตลาดมีขนาดเท่าไร ใครเป็นลูกค้าหลัก — นี่คือการวิจัยแบบใด?",
+    opts: ["Exploratory Research", "Causal Research", "Descriptive Research", "Predictive Research"],
+    ans: 2,
+    exp: "Descriptive Research มุ่งอธิบายลักษณะของตลาด ผู้บริโภค หรือปรากฏการณ์ เช่น ขนาดตลาด โปรไฟล์ลูกค้า พฤติกรรมการซื้อ โดยไม่หาสาเหตุ"
+  },
+  {
+    ch: "บทที่ 5 · การวิจัยการตลาด",
+    q: "Panel Research คืออะไร?",
+    opts: ["การสัมภาษณ์กลุ่ม 3-5 ผู้เชี่ยวชาญ", "การติดตามกลุ่มตัวอย่างเดิมซ้ำๆ ในระยะยาว", "การวิจัยผ่าน Social Media Panel", "การวิเคราะห์ข้อมูลจากกลุ่มธุรกิจ"],
+    ans: 1,
+    exp: "Panel Research คือการติดตามกลุ่มตัวอย่างเดิมอย่างต่อเนื่องในช่วงเวลาหนึ่ง เช่น Nielsen Panel ที่ติดตามพฤติกรรมการซื้อในครัวเรือนเดิมทุกสัปดาห์"
+  },
+
+  // ─── บทที่ 6 : พฤติกรรมผู้บริโภค (18 ข้อ) ───
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "ลูกค้าซื้อมือถือโดยเปรียบเทียบสเปค ราคา และอ่านรีวิวหลายชั่วโมง — นี่คือ Buying Behavior แบบใด?",
+    opts: ["Routine Response Behavior", "Limited Decision Making", "Extensive Decision Making", "Impulse Buying"],
+    ans: 2,
+    exp: "Extensive Decision Making เกิดเมื่อผู้บริโภคซื้อสินค้าราคาแพง/ไม่คุ้นเคย ใช้เวลาค้นหาข้อมูลมาก ประเมินทางเลือกอย่างละเอียด เช่น รถยนต์ บ้าน มือถือ"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "ซื้อขนมที่ชอบแบรนด์เดิมทุกครั้งโดยไม่คิดมาก — นี่คือ Buying Behavior แบบใด?",
+    opts: ["Extensive Decision Making", "Limited Decision Making", "Routine Response Behavior", "Impulse Buying"],
+    ans: 2,
+    exp: "Routine Response Behavior (Habitual Buying) เกิดกับสินค้าราคาถูก ซื้อบ่อย คุ้นเคย ไม่ต้องหาข้อมูล ตัดสินใจแทบทันที เป็น Brand Loyalty ที่เกิดจากนิสัย"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "ใน Maslow's Hierarchy of Needs การที่คนซื้อแก๊สมาสก์ในช่วงฝุ่น PM 2.5 ตอบสนองความต้องการขั้นใด?",
+    opts: ["Physiological Needs", "Safety Needs", "Social Needs", "Esteem Needs"],
+    ans: 1,
+    exp: "Safety Needs (ความต้องการด้านความปลอดภัย) ครอบคลุมสุขภาพ ความปลอดภัยจากอันตราย การป้องกันฝุ่น PM 2.5 ตอบสนองความต้องการขั้นนี้"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "คนซื้อ Rolex เพื่อบอกว่าตัวเองประสบความสำเร็จ — ตอบสนอง Maslow ขั้นใด?",
+    opts: ["Physiological Needs", "Safety Needs", "Social/Belonging Needs", "Esteem Needs"],
+    ans: 3,
+    exp: "Esteem Needs ความต้องการการยอมรับและสถานะทางสังคม ทั้ง Self-esteem (ความภาคภูมิใจในตัวเอง) และ Social Esteem (การได้รับการยอมรับจากคนอื่น)"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "Cognitive Dissonance ในการตัดสินใจซื้อหมายความว่าอะไร?",
+    opts: ["การที่ผู้บริโภคพอใจมากหลังซื้อ", "ความไม่สบายใจหรือสงสัยหลังซื้อ ว่าตัดสินใจถูกไหม", "การที่ผู้บริโภคเปรียบเทียบก่อนซื้อ", "การบอกต่อหลังจากซื้อสินค้า"],
+    ans: 1,
+    exp: "Cognitive Dissonance (Post-purchase Dissonance) คือความรู้สึกสงสัยหรือไม่สบายใจหลังซื้อ โดยเฉพาะกับสินค้าราคาแพง แบรนด์ควรสร้างความมั่นใจหลังการซื้อเพื่อลด Dissonance"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "ขั้นตอนการรับรู้-ตัดสินใจซื้อของผู้บริโภค (Consumer Decision Process) เริ่มด้วยขั้นใด?",
+    opts: ["Information Search", "Evaluation of Alternatives", "Problem Recognition", "Purchase Decision"],
+    ans: 2,
+    exp: "Consumer Decision Process: (1) Problem Recognition (รับรู้ปัญหา/ความต้องการ) → (2) Information Search → (3) Evaluation of Alternatives → (4) Purchase → (5) Post-purchase Evaluation"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "ผู้บริโภคอ่านรีวิวจาก Pantip และ YouTube ก่อนซื้อกล้อง — นี่อยู่ในขั้นใดของ Consumer Decision Process?",
+    opts: ["Problem Recognition", "Information Search", "Evaluation of Alternatives", "Post-purchase"],
+    ans: 1,
+    exp: "Information Search คือการค้นหาข้อมูลเพื่อช่วยตัดสินใจ แหล่งข้อมูลมี 4 ประเภท: Personal (เพื่อน/ครอบครัว), Commercial (โฆษณา), Public (รีวิว/สื่อ), Experiential (ทดลองใช้)"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "อิทธิพลของเพื่อนสนิทที่แนะนำร้านอาหาร มีน้ำหนักต่อการตัดสินใจมากกว่าโฆษณาทั่วไป — เพราะสิ่งใด?",
+    opts: ["เพื่อนมีความน่าเชื่อถือ (Source Credibility) สูงกว่า", "โฆษณาไม่ถึงกลุ่มเป้าหมาย", "ราคาอาหารมีผลต่อการตัดสินใจ", "เพื่อนมีข้อมูลมากกว่า"],
+    ans: 0,
+    exp: "Word-of-Mouth จากคนใกล้ชิดมีน้ำหนักสูงเพราะ Source Credibility สูง (ไม่มีผลประโยชน์แอบแฝง) งานวิจัยพบว่า WOM ทรงอิทธิพลกว่าโฆษณาถึง 10 เท่า"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "Influencer ที่ร่วมมือกับแบรนด์สินค้าเป็น Reference Group ประเภทใด?",
+    opts: ["Membership Group", "Aspirational Group", "Dissociative Group", "Primary Group"],
+    ans: 1,
+    exp: "Aspirational Group คือกลุ่มที่ผู้บริโภคอยากเป็นส่วนหนึ่ง หรือมองว่าเป็นแบบอย่าง Influencer ที่ผู้บริโภคชื่นชมจะมีอิทธิพลต่อการซื้อเพราะอยากเลียนแบบ"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "ลูกค้าซื้อสินค้า OTOP ราคาแพงกว่าซูเปอร์มาร์เก็ต แต่บอกว่า 'ช่วยชุมชน' — แรงจูงใจหลักคืออะไร?",
+    opts: ["Rational Motive – ราคาดีกว่า", "Patronage Motive – อุดหนุนชุมชน/ร้านค้าที่เลือก", "Emotional Motive – อยากรู้สึกดี", "ทั้ง Patronage และ Emotional Motive"],
+    ans: 3,
+    exp: "Patronage Motive คือการเลือกซื้อจากแหล่งหรือร้านค้าเฉพาะ (เช่น OTOP, ท้องถิ่น) + Emotional Motive คือความรู้สึกดีที่ได้ช่วยชุมชน ทั้งสองทำงานร่วมกัน"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "การที่ผู้บริโภคซื้อสินค้าในช่วงปีใหม่เพราะรู้สึก 'ได้เริ่มต้นใหม่' — นี่คืออิทธิพลด้านใด?",
+    opts: ["ปัจจัยด้านวัฒนธรรม", "ปัจจัยด้านจิตวิทยา – การรับรู้และทัศนคติ", "ปัจจัยด้านสถานการณ์ – เทศกาล", "ปัจจัยด้านส่วนบุคคล – อายุ"],
+    ans: 2,
+    exp: "ปัจจัยสถานการณ์ (Situational Factors) รวมถึงเวลาและสถานการณ์เฉพาะ เช่น เทศกาล โอกาสพิเศษ ที่กระตุ้นการซื้อ"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "Generation Z มีพฤติกรรมการซื้อแตกต่างจาก Baby Boomers เพราะอะไรเป็นหลัก?",
+    opts: ["รายได้ต่างกัน", "ประสบการณ์ชีวิตและเทคโนโลยีที่เติบโตมาด้วยกันต่างกัน", "สถานะครอบครัวต่างกัน", "สุขภาพต่างกัน"],
+    ans: 1,
+    exp: "ปัจจัยส่วนบุคคล (Personal Factors) รวมถึง Generation/ช่วงวัย Gen Z เติบโตมากับ Smartphone และ Social Media จึงมีพฤติกรรมการค้นหาข้อมูลและซื้อออนไลน์แตกต่างจาก Baby Boomers"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "Classical Conditioning ในการตลาดหมายความว่าอะไร?",
+    opts: ["การเรียนรู้จากรางวัลและบทลงโทษ", "การสร้างความเชื่อมโยงระหว่างสิ่งเร้ากับการตอบสนอง เช่น เพลงโฆษณาทำให้นึกถึงแบรนด์", "การสังเกตและเลียนแบบพฤติกรรมผู้อื่น", "การตัดสินใจซื้อด้วยเหตุผล"],
+    ans: 1,
+    exp: "Classical Conditioning (การวางเงื่อนไขแบบคลาสสิก): นำสิ่งเร้าที่เป็นกลาง (เพลง สี โลโก้) เชื่อมกับสิ่งที่ทำให้รู้สึกดี จนสิ่งเร้านั้นกระตุ้นการตอบสนองได้เอง เช่น เสียงเพลง McDonald's"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "Starbucks ให้ Stars สะสมแต้มทุกครั้งที่ซื้อ เพื่อแลกของรางวัล — นี่คือหลักจิตวิทยาใด?",
+    opts: ["Classical Conditioning", "Operant Conditioning", "Cognitive Learning", "Social Learning"],
+    ans: 1,
+    exp: "Operant Conditioning (การวางเงื่อนไขแบบผู้กระทำ): พฤติกรรมที่ได้รับรางวัล (Positive Reinforcement) จะถูกทำซ้ำ Loyalty Points กระตุ้นให้ลูกค้ากลับมาซื้อซ้ำ"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "เมื่อแบรนด์รองเท้า Collaborates กับศิลปินดัง และแฟนคลับแห่ซื้อเพราะชอบศิลปิน — นี่คือ Learning แบบใด?",
+    opts: ["Classical Conditioning", "Operant Conditioning", "Cognitive Learning", "Observational/Vicarious Learning"],
+    ans: 3,
+    exp: "Observational/Vicarious Learning (Social Learning Theory) คือการเรียนรู้จากการสังเกตผู้อื่น แฟนคลับเลียนแบบพฤติกรรมของศิลปินที่ชื่นชม"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "Selective Attention คืออะไรในกระบวนการรับรู้ (Perception)?",
+    opts: ["การแปลความหมายของสิ่งที่รับรู้", "การที่ผู้บริโภคเลือกให้ความสนใจเฉพาะสิ่งที่เกี่ยวข้องกับตน", "การจดจำข้อมูลบางส่วน", "การเปรียบเทียบข้อมูลใหม่กับความรู้เดิม"],
+    ans: 1,
+    exp: "กระบวนการรับรู้ (Perception) มี 3 ขั้น: (1) Selective Exposure – เปิดรับเฉพาะสิ่งที่สนใจ (2) Selective Attention – ให้ความสนใจเฉพาะบางส่วน (3) Selective Retention – จดจำเฉพาะที่เห็นด้วย"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "Involvement ของผู้บริโภคส่งผลต่อกระบวนการซื้ออย่างไร?",
+    opts: ["Involvement สูง = ตัดสินใจเร็ว ไม่ค้นหาข้อมูล", "Involvement สูง = ใช้เวลาค้นหาข้อมูลมาก ประเมินทางเลือกอย่างละเอียด", "Involvement ต่ำ = เปรียบเทียบหลายแบรนด์เสมอ", "Involvement ไม่มีผลต่อพฤติกรรมการซื้อ"],
+    ans: 1,
+    exp: "High Involvement Products (รถ บ้าน ของแพง) → Extensive Decision Making ค้นหามาก เปรียบเทียบมาก | Low Involvement Products (กาแฟ ขนม) → Routine Buying ตัดสินใจเร็ว"
+  },
+  {
+    ch: "บทที่ 6 · พฤติกรรมผู้บริโภค",
+    q: "ลูกค้าซื้อโทรศัพท์ iPhone แล้วรู้สึกกังวลว่าจะไม่คุ้มค่า แต่ Apple ส่งอีเมล 'ขอบคุณที่เลือก iPhone เราพร้อมช่วยเหลือตลอด 24 ชั่วโมง' — Apple ทำสิ่งนี้เพื่ออะไร?",
+    opts: ["สร้าง Brand Awareness", "ลด Cognitive Dissonance ของลูกค้า", "เพิ่ม Market Share", "เก็บข้อมูลลูกค้า"],
+    ans: 1,
+    exp: "Apple ลด Post-purchase Dissonance (Cognitive Dissonance) ด้วยการยืนยันว่าลูกค้าตัดสินใจถูกต้อง และให้การสนับสนุนหลังการขาย ซึ่งเพิ่ม Customer Satisfaction และ Loyalty"
+  }
+];
+
+// ═════════════════════════════════
+let currentIdx = 0;
+let correct = 0;
+let wrong = 0;
+let answered = false;
+let order = [];
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function startQuiz() {
+  order = shuffle([...Array(questions.length).keys()]);
+  currentIdx = 0; correct = 0; wrong = 0;
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('quizSection').classList.remove('hidden');
+  renderQ();
+}
+
+function renderQ() {
+  answered = false;
+  const q = questions[order[currentIdx]];
+  const num = currentIdx + 1;
+  const total = questions.length;
+
+  document.getElementById('qChapter').textContent = q.ch;
+  document.getElementById('qNumBig').textContent = num;
+  document.getElementById('qText').textContent = q.q;
+  document.getElementById('progNum').textContent = `${num} / ${total}`;
+  document.getElementById('progBar').style.width = `${(num / total) * 100}%`;
+  document.getElementById('liveCorrect').textContent = correct;
+  document.getElementById('liveWrong').textContent = wrong;
+
+  // shuffle option order
+  const optIdxs = shuffle([0, 1, 2, 3]);
+  const letters = ['A', 'B', 'C', 'D'];
+  const wrap = document.getElementById('optsWrap');
+  wrap.innerHTML = '';
+
+  optIdxs.forEach((origIdx, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt';
+    btn.dataset.orig = origIdx;
+    btn.innerHTML = `<span class="opt-letter">${letters[i]}</span><span class="opt-text">${q.opts[origIdx]}</span>`;
+    btn.onclick = () => selectOpt(btn, origIdx, q);
+    wrap.appendChild(btn);
+  });
+
+  document.getElementById('resultBadge').className = 'result-badge';
+  document.getElementById('resultBadge').innerHTML = '';
+  document.getElementById('explanation').className = 'explanation';
+  document.getElementById('btnNext').className = 'btn-next';
+  document.getElementById('btnNext').textContent = num < total ? 'ข้อถัดไป →' : 'ดูผลลัพธ์ →';
+
+  // Animate card
+  const card = document.getElementById('qCard');
+  card.style.animation = 'none';
+  card.offsetHeight;
+  card.style.animation = 'cardIn 0.4s cubic-bezier(.4,0,.2,1) both';
+}
+
+function selectOpt(btn, origIdx, q) {
+  if (answered) return;
+  answered = true;
+
+  const allOpts = document.querySelectorAll('.opt');
+  allOpts.forEach(o => { o.disabled = true; });
+
+  const isCorrect = origIdx === q.ans;
+  if (isCorrect) {
+    btn.classList.add('correct');
+    correct++;
+  } else {
+    btn.classList.add('wrong');
+    // highlight correct
+    allOpts.forEach(o => {
+      if (parseInt(o.dataset.orig) === q.ans) o.classList.add('correct');
+      else if (o !== btn) o.classList.add('dim');
+    });
+    wrong++;
+  }
+
+  // result badge
+  const badge = document.getElementById('resultBadge');
+  if (isCorrect) {
+    badge.className = 'result-badge correct-badge show';
+    badge.innerHTML = '✅ ตอบถูก! เยี่ยมมาก';
+  } else {
+    badge.className = 'result-badge wrong-badge show';
+    badge.innerHTML = `❌ ตอบผิด — คำตอบที่ถูกคือ: <strong>${q.opts[q.ans]}</strong>`;
+  }
+
+  // explanation
+  document.getElementById('expText').innerHTML = q.exp;
+  document.getElementById('explanation').className = 'explanation show';
+  document.getElementById('btnNext').className = 'btn-next show';
+
+  // update live score
+  document.getElementById('liveCorrect').textContent = correct;
+  document.getElementById('liveWrong').textContent = wrong;
+}
+
+function nextQ() {
+  currentIdx++;
+  if (currentIdx >= questions.length) {
+    showScore();
+  } else {
+    renderQ();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function showScore() {
+  document.getElementById('quizSection').classList.add('hidden');
+  const screen = document.getElementById('scoreScreen');
+  screen.classList.remove('hidden');
+
+  const pct = Math.round((correct / questions.length) * 100);
+
+  // ring animation
+  setTimeout(() => {
+    const circumference = 534;
+    const offset = circumference - (circumference * pct / 100);
+    document.getElementById('ringFill').style.strokeDashoffset = offset;
+    document.getElementById('ringPct').textContent = pct + '%';
+  }, 200);
+
+  document.getElementById('cNum').textContent = correct;
+  document.getElementById('wNum').textContent = wrong;
+  document.getElementById('pctNum').textContent = pct + '%';
+
+  let title, grade, color;
+  if (pct >= 90) { title = 'ยอดเยี่ยม! 🏆'; grade = '🥇 A – ดีเยี่ยม'; color = 'rgba(52,211,153,0.15); border-color: var(--correct); color: var(--correct)'; }
+  else if (pct >= 80) { title = 'เก่งมาก! 🌟'; grade = '🥈 B – ดีมาก'; color = 'rgba(56,189,248,0.15); border-color: var(--accent); color: var(--accent)'; }
+  else if (pct >= 70) { title = 'ผ่านได้ดี! 👍'; grade = '🥉 C – ดี'; color = 'rgba(125,211,252,0.12); border-color: var(--accent2); color: var(--accent2)'; }
+  else if (pct >= 60) { title = 'พอผ่าน 📚'; grade = '📘 D – ควรทบทวน'; color = 'rgba(251,191,36,0.12); border-color: var(--gold); color: var(--gold)'; }
+  else { title = 'ต้องทบทวนใหม่ 💪'; grade = '📕 F – ทบทวนให้มากขึ้น'; color = 'rgba(248,113,113,0.12); border-color: var(--wrong); color: var(--wrong)'; }
+
+  document.getElementById('scoreTitle').textContent = title;
+  const gb = document.getElementById('gradeBadge');
+  gb.textContent = grade;
+  gb.style.cssText = `background: ${color}`;
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function restartQuiz() {
+  document.getElementById('scoreScreen').classList.add('hidden');
+  startQuiz();
+}
+
+// Particles
+function createParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (12 + Math.random() * 20) + 's';
+    p.style.animationDelay = (Math.random() * 15) + 's';
+    p.style.width = p.style.height = (1 + Math.random() * 3) + 'px';
+    p.style.opacity = Math.random() * 0.5;
+    container.appendChild(p);
+  }
+}
+createParticles();
+</script>
+</body>
+</html>
